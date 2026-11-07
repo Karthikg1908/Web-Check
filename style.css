@@ -26,11 +26,16 @@ button { font-family: var(--sans); }
 .welcome-screen::after { content: ""; position: absolute; z-index: 2; inset: 0; pointer-events: none; background: linear-gradient(180deg, rgba(240,223,188,.06), rgba(74,19,23,.12) 62%, rgba(36,16,15,.42)); }
 .welcome-photo { position: absolute; z-index: 1; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center 46%; }
 .welcome-screen.is-leaving { opacity: 0; visibility: hidden; pointer-events: none; }
-.welcome-card { position: relative; z-index: 3; width: min(100%, 680px); padding: 0 16px; }
-.welcome-card .eyebrow { margin-bottom: 18px; color: var(--wine); text-shadow: 0 2px 16px rgba(255,250,240,.95); }
-.welcome-names { max-width: 100%; margin: 0; color: var(--wine); font: 400 clamp(58px, 7vw, 64px)/.95 var(--script); white-space: nowrap; text-shadow: 0 3px 22px rgba(255,250,240,.98); }
+.welcome-card { position: relative; z-index: 3; isolation: isolate; width: min(100%, 680px); padding: 0 16px; }
+.welcome-card::before {
+  content: ""; position: absolute; z-index: -1; inset: -32px -64px -50px; pointer-events: none;
+  background: radial-gradient(ellipse at 50% 36%, rgba(255,250,240,.9) 0 34%, rgba(255,250,240,.68) 52%, rgba(255,250,240,.25) 68%, transparent 80%);
+  filter: blur(12px);
+}
+.welcome-card .eyebrow { margin-bottom: 18px; color: var(--wine); text-shadow: 0 1px 2px rgba(255,250,240,1), 0 2px 18px rgba(255,250,240,1); }
+.welcome-names { max-width: 100%; margin: 0; color: var(--wine); font: 400 clamp(58px, 7vw, 64px)/.95 var(--script); white-space: nowrap; text-shadow: 0 1px 2px rgba(255,250,240,1), 0 3px 24px rgba(255,250,240,1); }
 .welcome-names em { color: var(--rose); font-weight: 400; }
-.welcome-card h2 { margin: 16px 0 30px; color: var(--wine-deep); font: 500 clamp(28px, 3.5vw, 40px)/1 var(--serif); letter-spacing: -.02em; text-shadow: 0 2px 18px rgba(255,250,240,.98); }
+.welcome-card h2 { margin: 16px 0 30px; color: var(--wine); font: 600 clamp(28px, 3.5vw, 40px)/1 var(--serif); letter-spacing: -.02em; text-shadow: 0 1px 2px rgba(255,250,240,1), 0 2px 20px rgba(255,250,240,1); }
 .welcome-button { width: 58px; min-width: 58px; height: 58px; display: inline-grid; place-items: center; padding: 0; color: white; background: var(--wine); border: 1px solid var(--gold); border-radius: 50%; box-shadow: 0 10px 30px rgba(36,16,15,.28); cursor: pointer; }
 .welcome-button:hover, .welcome-button:focus-visible { color: var(--wine-deep); background: var(--gold); border-color: var(--wine); outline: 2px solid var(--wine); outline-offset: 3px; }
 .welcome-button span { font: 20px var(--serif); }
@@ -175,9 +180,18 @@ nav a:hover, .share-link:hover { color: var(--gold); }
   .welcome-screen::after { z-index: 2; background: linear-gradient(180deg, rgba(240,223,188,.03), rgba(36,16,15,.18)); }
   .welcome-photo { z-index: 1; object-fit: contain; object-position: center; }
   .welcome-card { padding: 0 12px; }
-  .welcome-names { font-size: clamp(54px, 16vw, 66px); line-height: .84; white-space: normal; }
-  .welcome-names em { display: block; width: max-content; margin: 4px auto 6px; font-size: .72em; line-height: .5; }
+  .welcome-card::before { inset: -24px -22px -42px; background: radial-gradient(ellipse at 50% 34%, rgba(255,250,240,.92) 0 36%, rgba(255,250,240,.7) 54%, rgba(255,250,240,.22) 72%, transparent 84%); filter: blur(10px); }
+  .welcome-names {
+    position: fixed; z-index: 5; left: 50%; top: 50svh; width: calc(100% - 40px); margin: 0;
+    color: #fff; font-size: clamp(54px, 16vw, 66px); line-height: .84; text-align: center;
+    white-space: normal; transform: translate(-50%, -50%);
+    text-shadow: 0 2px 3px rgba(36,16,15,.95), 0 0 12px rgba(255,250,240,.72), 0 5px 24px rgba(36,16,15,.9);
+  }
+  .welcome-names em { display: block; width: max-content; margin: 5px auto 7px; font-size: 0; line-height: 1; }
+  .welcome-names em::before { content: "♥"; color: var(--wine); font: 400 29px/1 var(--serif); text-shadow: 0 0 9px rgba(255,250,240,.95), 0 2px 8px rgba(36,16,15,.72); }
   .welcome-card h2 { margin-top: 26px; font-size: 30px; }
+  .welcome-button { display: none; }
+  .welcome-screen { cursor: pointer; }
   .site-header { height: 68px; }
   nav a { display: none; }
   nav { gap: 0; }
@@ -218,6 +232,9 @@ nav a:hover, .share-link:hover { color: var(--gold); }
   .closing-share { padding-inline: 16px; font-size: 10px; }
   .closing-signature strong { font-size: 40px; }
   .music-button { right: 14px; width: 44px; min-width: 44px; height: 44px; }
+}
+@media (max-width: 760px) and (orientation: landscape) {
+  .welcome-names { top: 44svh; }
 }
 @media (max-width: 390px) {
   .hero h1 { font-size: 68px; }
