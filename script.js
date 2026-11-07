@@ -188,7 +188,9 @@
   }
 
   // A section-by-section tour: wait 10 seconds, then move quickly to the next page.
-  const tourPages = [...document.querySelectorAll(".hero, .intro, .venues-page, .moments, .film, .closing")];
+  const mainTourPages = [...document.querySelectorAll(".hero, .intro, .venues-page, .moments, .film, .closing")];
+  const venuePage = document.querySelector(".venues-page");
+  const venueCards = [...document.querySelectorAll(".venues-page .venue-card")];
   let autoScrollEnabled = !reducedMotion;
   let advanceTimer = 0;
   let interactionTimer = 0;
@@ -196,9 +198,18 @@
   let autoScrollInProgress = false;
   let invitationOpened = false;
 
+  function getTourPages() {
+    if (!window.matchMedia("(max-width: 760px)").matches) return mainTourPages;
+    return mainTourPages.flatMap((page) => page === venuePage ? venueCards : [page]);
+  }
+
+  function pageTop(page) {
+    return page.getBoundingClientRect().top + window.scrollY;
+  }
+
   function activeTourIndex() {
-    return tourPages.reduce((activeIndex, page, index) => (
-      page.offsetTop <= window.scrollY + 2 ? index : activeIndex
+    return getTourPages().reduce((activeIndex, page, index) => (
+      pageTop(page) <= window.scrollY + 2 ? index : activeIndex
     ), 0);
   }
 
@@ -210,17 +221,19 @@
 
   function advancePage() {
     if (autoScrollInProgress) return;
+    const tourPages = getTourPages();
     const nextPage = tourPages[activeTourIndex() + 1];
     if (!nextPage) {
       autoScrollEnabled = false;
       return;
     }
     autoScrollInProgress = true;
-    window.scrollTo({ top: nextPage.offsetTop, behavior: reducedMotion ? "auto" : "smooth" });
+    const destination = pageTop(nextPage);
+    window.scrollTo({ top: destination, behavior: reducedMotion ? "auto" : "smooth" });
     window.setTimeout(() => {
       const previousScrollBehavior = document.documentElement.style.scrollBehavior;
       document.documentElement.style.scrollBehavior = "auto";
-      window.scrollTo(0, nextPage.offsetTop);
+      window.scrollTo(0, destination);
       document.documentElement.style.scrollBehavior = previousScrollBehavior;
       autoScrollInProgress = false;
       scheduleNextPage();
