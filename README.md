@@ -1,6 +1,6 @@
 # Praveen & Kavya — Wedding Invitation
 
-A lightweight, responsive South Indian wedding invitation with a lavender and plum colour theme. It is designed for static hosting on GitHub Pages.
+A lightweight, responsive South Indian wedding invitation with a warm burgundy, champagne-gold, and ivory colour theme. It is designed for static hosting on GitHub Pages.
 
 ## Features
 
